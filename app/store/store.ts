@@ -6,11 +6,13 @@ import {reduxStorage} from './storage';
 import tasksSlice from './tasksSlice';
 import userSlice from './userSlice';
 import dummyNetwokSlice from './dummyNetwork';
+import timerSlice from './timeSlice';
 
 const rootReducer = combineReducers({
   difficulty: tasksSlice,
   user: userSlice,
   dummyNetwork: dummyNetwokSlice,
+  timeSlice: timerSlice,
 });
 
 const persistConfig = {
