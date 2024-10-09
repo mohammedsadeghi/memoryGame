@@ -25,7 +25,7 @@ import {updateToken} from '../store/userSlice';
 
 // Screens
 // import Login from '../screens/auth/Login';
-import Tasks from '../screens/Tasks';
+import Tasks from '../screens/Memory';
 import NetworkExample from '../screens/NetworkExample';
 import Settings from '../screens/Settings';
 

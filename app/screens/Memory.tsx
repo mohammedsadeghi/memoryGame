@@ -1,18 +1,17 @@
-import React, {useState, useRef} from 'react';
-import {StyleSheet, FlatList, View, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, FlatList, View} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {taskAdded, taskToggled} from '../store/tasksSlice';
+import {changeDifficulty} from '../store/tasksSlice';
 import {RootState} from '../store/store';
-import {Task} from '../store/tasksSlice';
 
 import {useTheme} from '../theme/useTheme';
 import Layout from '../components/Layout';
 import Card from '../components/Card';
 import ListItem from '../components/ListItem';
 import {Button} from '../components/Button/Button';
-import Text from './../components/Text';
+import Text from '../components/Text';
 
 const ButtonText = ({text}: {text: string}) => {
   const {theme} = useTheme();
@@ -31,29 +30,29 @@ const ButtonText = ({text}: {text: string}) => {
 const Tasks = () => {
   const {theme} = useTheme();
 
-  const inputRef = useRef<TextInput>(null);
-
-  const todoList = useSelector((state: RootState) => state.todos.entities);
+  const difficulty = useSelector(
+    (state: RootState) => state.difficulty.entities.id,
+  );
   // const loadingStatus = useSelector((state) => state.todos.status);
   const dispatch = useDispatch();
 
-  const [difficultyLevel, setDifficultyLevel] = useState('');
+  const [difficultyLevel, setDifficultyLevel] = useState<
+    'Easy' | 'Medium' | 'Hard'
+  >(difficulty);
 
-  const addNewTask = () => {
-    dispatch(taskAdded({}));
-
-    inputRef.current?.clear();
+  const setGlobalDifficultyLevel = (difficultyLevelInput: string) => {
+    dispatch(changeDifficulty(difficultyLevelInput));
+  };
+  const changeDifficultyLevel = (level: 'Easy' | 'Medium' | 'Hard') => {
+    setDifficultyLevel(level);
+    setGlobalDifficultyLevel(level);
   };
 
-  const onCheckedHandler = (id: string) => {
-    dispatch(taskToggled(id));
-  };
-
-  const renderItem = ({item, index}: {item: Task; index: number}) => (
+  const renderItem = ({item, index}: {index: number}) => (
     <ListItem item={item} index={index} onPress={onCheckedHandler} />
   );
 
-  const keyExtractor = (item: Task) => `task-${item.id}`;
+  const keyExtractor = item => `task-${item.id}`;
 
   return (
     <Layout testID="Screen.Tasks">
@@ -71,25 +70,30 @@ const Tasks = () => {
         {/* TextInput and InputButton starts here */}
         <View style={styles.difficultyBtnRow}>
           <Button
-            onPress={addNewTask}
+            onPress={() => changeDifficultyLevel('Easy')}
             style={styles.btnDifficulty}
-            backgroundColor={theme.color}>
+            backgroundColor={
+              difficultyLevel === 'Easy' ? undefined : theme.color
+            }>
             <ButtonText text="Easy" />
           </Button>
           <Button
-            onPress={addNewTask}
+            onPress={() => changeDifficultyLevel('Medium')}
             style={styles.btnDifficulty}
-            backgroundColor={theme.color}>
+            backgroundColor={
+              difficultyLevel === 'Medium' ? undefined : theme.color
+            }>
             <ButtonText text="Medium" />
           </Button>
           <Button
-            onPress={addNewTask}
+            onPress={() => changeDifficultyLevel('Hard')}
             style={styles.btnDifficulty}
-            backgroundColor={theme.color}>
+            backgroundColor={
+              difficultyLevel === 'Hard' ? undefined : theme.color
+            }>
             <ButtonText text="Hard" />
           </Button>
         </View>
-        {/* TextInput and InputButton ends here */}
       </Card>
     </Layout>
   );

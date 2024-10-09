@@ -4,7 +4,7 @@ import {describe, it} from '@jest/globals';
 
 import {fireEvent, render} from '../../app/utils/test-utils';
 
-import Tasks from '../../app/screens/Tasks';
+import Tasks from '../../app/screens/Memory';
 
 describe('Tasks screen', () => {
   it('the screen exists', () => {

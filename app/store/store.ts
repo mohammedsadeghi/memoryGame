@@ -8,7 +8,7 @@ import userSlice from './userSlice';
 import dummyNetwokSlice from './dummyNetwork';
 
 const rootReducer = combineReducers({
-  todos: tasksSlice,
+  difficulty: tasksSlice,
   user: userSlice,
   dummyNetwork: dummyNetwokSlice,
 });

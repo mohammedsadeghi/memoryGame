@@ -1,54 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-export type Task = {
-  id: string;
-  title: string;
-  done: boolean;
+export type Difficulty = {
+  id: 'Easy' | 'Medium' | 'Hard';
 };
 
 export type InitialState = {
   status: 'idle' | 'loading' | 'complete';
-  entities: Task[];
+  entities: Difficulty;
 };
 
 const initialState: InitialState = {
   status: 'idle',
-  entities: [
-    {
-      id: '1',
-      title: 'Task 1',
-      done: false,
-    },
-    {
-      id: '2',
-      title: 'Task 2',
-      done: false,
-    },
-  ],
+  entities: {
+    id: 'Easy',
+  },
 };
 
 const tasksSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    taskAdded(state, action) {
-      const todo = action.payload;
-      state.entities.push(todo);
-    },
-    taskToggled(state, action) {
-      const todoId = action.payload;
-      const todo = state.entities.find(e => e.id === todoId);
-      if (todo) {
-        todo.done = !todo.done;
-      }
-    },
-    completedTasksCleared(state) {
-      state.entities = state.entities.filter(todo => !todo.done);
+    changeDifficulty(state, action) {
+      const difficulty = action.payload;
+      state.entities.id = difficulty;
     },
   },
 });
 
-export const {taskAdded, taskToggled, completedTasksCleared} =
-  tasksSlice.actions;
+export const {changeDifficulty} = tasksSlice.actions;
 
 export default tasksSlice.reducer;
