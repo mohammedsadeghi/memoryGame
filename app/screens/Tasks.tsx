@@ -2,7 +2,6 @@ import React, {useState, useRef} from 'react';
 import {StyleSheet, FlatList, View, TextInput} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import {taskAdded, taskToggled} from '../store/tasksSlice';
 import {RootState} from '../store/store';
@@ -13,8 +12,22 @@ import Layout from '../components/Layout';
 import Card from '../components/Card';
 import ListItem from '../components/ListItem';
 import {Button} from '../components/Button/Button';
-import {typeVariants} from '../theme/theme';
+import Text from './../components/Text';
 
+const ButtonText = ({text}: {text: string}) => {
+  const {theme} = useTheme();
+  return (
+    <Text
+      style={[
+        // eslint-disable-next-line react-native/no-inline-styles
+        {
+          color: theme?.layoutBg,
+        },
+      ]}>
+      {text}
+    </Text>
+  );
+};
 const Tasks = () => {
   const {theme} = useTheme();
 
@@ -24,13 +37,11 @@ const Tasks = () => {
   // const loadingStatus = useSelector((state) => state.todos.status);
   const dispatch = useDispatch();
 
-  const [text, setText] = useState('');
+  const [difficultyLevel, setDifficultyLevel] = useState('');
 
   const addNewTask = () => {
-    let temp = text.trim();
-    if (temp !== '') {
-      dispatch(taskAdded({id: Date.now(), title: temp, done: false}));
-    }
+    dispatch(taskAdded({}));
+
     inputRef.current?.clear();
   };
 
@@ -48,7 +59,7 @@ const Tasks = () => {
     <Layout testID="Screen.Tasks">
       {/* Tasks Listing starts here */}
       <FlatList
-        data={todoList}
+        data={[]}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.flatList}
@@ -56,28 +67,26 @@ const Tasks = () => {
       {/* Tasks Listing ends here */}
 
       <Card
-        style={[styles.inputCard, {borderTopColor: theme?.cardBorderColor}]}>
+        style={[styles.difficulty, {borderTopColor: theme?.cardBorderColor}]}>
         {/* TextInput and InputButton starts here */}
-        <View style={styles.inputBtnRow}>
-          <TextInput
-            testID="Tasks.newTaskInput"
-            ref={inputRef}
-            placeholder="New Task"
-            placeholderTextColor={theme?.color}
-            style={[
-              styles.input,
-              typeVariants.bodyMedium,
-              {
-                color: theme?.color,
-                backgroundColor: theme?.layoutBg,
-                borderColor: theme?.layoutBg,
-              },
-            ]}
-            onChangeText={t => setText(t)}
-            onSubmitEditing={() => addNewTask()}
-          />
-          <Button onPress={addNewTask} style={styles.btnAdd}>
-            <Icon name="checkmark-sharp" size={20} color={theme.layoutBg} />
+        <View style={styles.difficultyBtnRow}>
+          <Button
+            onPress={addNewTask}
+            style={styles.btnDifficulty}
+            backgroundColor={theme.color}>
+            <ButtonText text="Easy" />
+          </Button>
+          <Button
+            onPress={addNewTask}
+            style={styles.btnDifficulty}
+            backgroundColor={theme.color}>
+            <ButtonText text="Medium" />
+          </Button>
+          <Button
+            onPress={addNewTask}
+            style={styles.btnDifficulty}
+            backgroundColor={theme.color}>
+            <ButtonText text="Hard" />
           </Button>
         </View>
         {/* TextInput and InputButton ends here */}
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
   },
-  inputCard: {
+  difficulty: {
     borderTopWidth: StyleSheet.hairlineWidth,
     elevation: 4,
     borderTopLeftRadius: 16,
@@ -111,36 +120,26 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
   },
-  inputBtnRow: {
+  difficultyBtnRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  inputBtnWrp: {
+  difficultyBtnWrp: {
     flexDirection: 'row',
     flex: 1,
   },
-  input: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#f0f0f0',
-    flex: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    fontSize: 14,
-    height: 45,
-    backgroundColor: '#f6f6f6',
-  },
-  btnAdd: {
+  btnDifficulty: {
     borderRadius: 5,
     padding: 6,
-    flex: 0.1,
+    flex: 0.2,
     justifyContent: 'center',
     alignItems: 'center',
     color: '#fff',
     height: 42,
     marginLeft: 5,
   },
-  btnAddText: {
+  btnDifficultyText: {
     color: '#fff',
     fontSize: 14,
   },

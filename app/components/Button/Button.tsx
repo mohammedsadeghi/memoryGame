@@ -8,15 +8,28 @@ export type ButtonProps = {
   text?: string;
   children?: React.ReactNode;
   style?: ViewStyle;
+  backgroundColor?: string;
 };
 
-export const Button = ({onPress, text, children, style}: ButtonProps) => {
+export const Button = ({
+  onPress,
+  text,
+  children,
+  style,
+  backgroundColor,
+}: ButtonProps) => {
   const {theme} = useTheme();
   return (
     <Pressable
       style={({pressed}) => [
         styles.container,
-        {backgroundColor: pressed ? `${theme.primary}ee` : theme.primary},
+        {
+          backgroundColor: pressed
+            ? `${theme.primary}ee`
+            : backgroundColor
+            ? backgroundColor
+            : theme.primary,
+        },
         style,
       ]}
       onPress={onPress}>
